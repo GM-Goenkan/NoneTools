@@ -1,275 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Movie Guide App</title>
-    <link rel="icon" type="image/x-icon" href="Dr.png">
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap"
-      rel="stylesheet"/>
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <header>
-      <div class="logo-container">
-        <img src="Dr.png" alt="None-Movies Logo" class="logo" />
-        <h1 class="logo-text">None-Movies</h1>
-      </div>
-    </header>
-    <div class="container">
-      <div class="search-container">
-        <input
-          type="text"
-          placeholder="Enter movie name here..."
-          id="movie-name"
-          value="Justice League"
-        />
-        <button id="search-btn">Search</button>
-      </div>
-      <div id="result"></div>
-    </div>
-    <script src="key.js"></script>
-    <script src="script.js"></script>
-  </body>
-</html>
-
-<style>
-  * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
-  }
-  
-  body {
-    height: 100vh;
-    background-image: url('https://images.template.net/106268/free-dark-mountain-background-1lyam.png');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-  }
-  
-  header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 2em;
-  }
-  
-  .logo-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo {
-    width: 50px; /* Adjust as needed */
-    margin-right: 10px;
-  }
-  
-  .logo-text {
-    font-size: 1.5em;
-    color: #ffffff;
-  }
-  
-  .container {
-    font-size: 16px;
-    width: 90vw;
-    max-width: 37.5em;
-    padding: 1.8em;
-    background-color: #201f28;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    border-radius: 0.6em;
-    box-shadow: 1.2em 2em 3em rgba(0, 0, 0, 0.2);
-  }
-  
-  .search-container {
-    display: grid;
-    grid-template-columns: 9fr 3fr;
-    gap: 1.2em;
-  }
-  
-  .search-container input,
-  .search-container button {
-    font-size: 0.9em;
-    outline: none;
-    border-radius: 0.3em;
-  }
-  
-  .search-container input {
-    background-color: transparent;
-    border: 1px solid #a0a0a0;
-    padding: 0.7em;
-    color: #ffffff;
-  }
-  
-  .search-container input:focus {
-    border-color: #ffffff;
-  }
-  
-  .search-container button {
-    background-color: #ffb92a;
-    border: none;
-    cursor: pointer;
-  }
-  
-  #result {
-    color: #ffffff;
-  }
-  
-  .info {
-    position: relative;
-    display: grid;
-    grid-template-columns: 4fr 8fr;
-    align-items: center;
-    margin-top: 1.2em;
-  }
-  
-  .poster {
-    width: 100%;
-  }
-  
-  h2 {
-    text-align: center;
-    font-size: 1.5em;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-  }
-  
-  .rating {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6em;
-    margin: 0.6em 0 0.9em 0;
-  }
-  
-  .rating img {
-    width: 1.2em;
-  }
-  
-  .rating h4 {
-    display: inline-block;
-    font-size: 1.1em;
-    font-weight: 500;
-  }
-  
-  .details {
-    display: flex;
-    font-size: 0.95em;
-    gap: 1em;
-    justify-content: center;
-    color: #a0a0a0;
-    margin: 0.6em 0;
-    font-weight: 300;
-  }
-  
-  .genre {
-    display: flex;
-    justify-content: space-around;
-  }
-  
-  .genre div {
-    border: 1px solid #a0a0a0;
-    font-size: 0.75em;
-    padding: 0.4em 1.6em;
-    border-radius: 0.4em;
-    font-weight: 300;
-  }
-  
-  h3 {
-    font-weight: 500;
-    margin-top: 1.2em;
-  }
-  
-  p {
-    font-size: 0.9em;
-    font-weight: 300;
-    line-height: 1.8em;
-    text-align: justify;
-    color: #a0a0a0;
-  }
-  
-  .msg {
-    text-align: center;
-  }
-  
-  @media screen and (max-width: 600px) {
-    .container {
-      font-size: 14px;
-    }
-    .info {
-      grid-template-columns: 1fr;
-    }
-    .poster {
-      margin: auto;
-      width: auto;
-      max-height: 10.8em;
-    }
-  }
-  
-</style>
-<script>
-    //Initial References
-let movieNameRef = document.getElementById("movie-name");
-let searchBtn = document.getElementById("search-btn");
-let result = document.getElementById("result");
-
-//Function to fetch data from API
-let getMovie = () => {
-  let movieName = movieNameRef.value;
-  let url = `http://www.omdbapi.com/?t=${movieName}&apikey=${key}`;
-  //If input field is empty
-  if (movieName.length <= 0) {
-    result.innerHTML = `<h3 class="msg">Please Enter A Movie Name</h3>`;
-  }
-  //If input field is NOT empty
-  else {
-    fetch(url)
-      .then((resp) => resp.json())
-      .then((data) => {
-        //If movie exists in database
-        if (data.Response == "True") {
-          result.innerHTML = `
-            <div class="info">
-                <img src=${data.Poster} class="poster">
-                <div>
-                    <h2>${data.Title}</h2>
-                    <div class="rating">
-                        <img src="star.webp">
-                        <h4>${data.imdbRating}</h4>
-                    </div>
-                    <div class="details">
-                        <span>${data.Rated}</span>
-                        <span>${data.Year}</span>
-                        <span>${data.Runtime}</span>
-                    </div>
-                    <div class="genre">
-                        <div>${data.Genre.split(",").join("</div><div>")}</div>
-                    </div>
-                </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoneDocs - Your Online Text Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #202124;
+        }
+        .editor-container {
+            width: 100%;
+            height: 100vh;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 10px;
+            overflow-x: auto;
+        }
+        .toolbar button {
+            padding: 8px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: transparent;
+        }
+        .toolbar button:hover {
+            background-color: #f1f3f4;
+        }
+        #editor {
+            flex: 1;
+            font-size: 16px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            resize: vertical;
+            background-color: #f1f3f4;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        .color-palette {
+            display: flex;
+            margin-bottom: 10px;
+            overflow-x: auto;
+        }
+        .color-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="editor-container">
+        <div class="toolbar">
+            <div class="none-docs-logo">
+                <img src="josh.png" alt="NoneDocs Logo" style="height: 24px;">
             </div>
-            <h3>Plot:</h3>
-            <p>${data.Plot}</p>
-            <h3>Cast:</h3>
-            <p>${data.Actors}</p>
-            
-        `;
+            <div>
+                <button onclick="changeFontSize()"><i class="fas fa-text-height"></i></button>
+                <button onclick="changeFont()"><i class="fas fa-font"></i></button>
+                <button onclick="changeTextColor()"><i class="fas fa-paint-brush"></i></button>
+                <button onclick="highlightText()"><i class="fas fa-highlighter"></i></button>
+                <button onclick="toggleBold()"><i class="fas fa-bold"></i></button>
+                <button onclick="toggleItalic()"><i class="fas fa-italic"></i></button>
+                <button onclick="toggleUnderline()"><i class="fas fa-underline"></i></button>
+                <button onclick="alignText('left')"><i class="fas fa-align-left"></i></button>
+                <button onclick="alignText('center')"><i class="fas fa-align-center"></i></button>
+                <button onclick="alignText('right')"><i class="fas fa-align-right"></i></button>
+                <button onclick="toggleNumbering()"><i class="fas fa-list-ol"></i></button>
+                <button onclick="downloadAsText()"><i class="fas fa-file-download"></i></button>
+            </div>
+        </div>
+        <div class="color-palette" id="colorPalette">
+            <div class="color-box" style="background-color: yellow" onclick="changeHighlightColor('yellow')"></div>
+            <div class="color-box" style="background-color: cyan" onclick="changeHighlightColor('cyan')"></div>
+            <div class="color-box" style="background-color: lightgreen" onclick="changeHighlightColor('lightgreen')"></div>
+            <div class="color-box" style="background-color: pink" onclick="changeHighlightColor('pink')"></div>
+        </div>
+        <div id="editor" contenteditable="true" placeholder="Start typing..."></div>
+    </div>
+
+    <script>
+        // JavaScript Code
+        function changeFontSize() {
+            let size = prompt("Enter font size (in pixels):");
+            document.getElementById('editor').style.fontSize = size + 'px';
         }
-        //If movie does NOT exists in database
-        else {
-          result.innerHTML = `<h3 class='msg'>${data.Error}</h3>`;
+
+        function changeFont() {
+            let font = prompt("Enter font name:");
+            document.getElementById('editor').style.fontFamily = font;
         }
-      })
-      //If error occurs
-      .catch(() => {
-        result.innerHTML = `<h3 class="msg">Error Occured</h3>`;
-      });
-  }
-};
-searchBtn.addEventListener("click", getMovie);
-window.addEventListener("load", getMovie);
-</script>
+
+        function changeTextColor() {
+            let color = prompt("Enter text color:");
+            document.getElementById('editor').style.color = color;
+        }
+
+        function highlightText() {
+            document.execCommand('hiliteColor', false, document.getElementById('highlightColor').value);
+        }
+
+        function toggleBold() {
+            document.execCommand('bold', false, null);
+        }
+
+        function toggleItalic() {
+            document.execCommand('italic', false, null);
+        }
+
+        function toggleUnderline() {
+            document.execCommand('underline', false, null);
+        }
+
+        function alignText(align) {
+            document.execCommand('justify' + align, false, null);
+        }
+
+        function toggleNumbering() {
+            document.execCommand('insertOrderedList', false, null);
+        }
+
+        function changeHighlightColor(color) {
+            document.getElementById('highlightColor').value = color;
+            highlightText();
+        }
+
+        function downloadAsText() {
+            let text = document.getElementById('editor').innerText;
+            if (text.trim() === '') {
+                alert("Nothing to download. Please type something first.");
+                return;
+            }
+
+            const blob = new Blob([text], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            const url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = 'NoneDocs_Content.txt';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>
