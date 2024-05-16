@@ -1,0 +1,22 @@
+{
+    "name":"NoneTools",
+    "short_name":"NoneT",
+    "start_url":"index.html",
+    "display":"standalone",
+    "background_color":"#5900b3",
+    "theme_color":"black",
+    "scope": ".",
+    "description":"user privacy is our main motice",
+    "icons":[
+    {
+    "src":"none.png",                     
+    "sizes":"192x192",
+    "type":"image/png"
+    },
+    {
+    "src":"none.png",
+    "sizes":"512x512",
+    "type":"image/png"
+    }
+  ]
+}
